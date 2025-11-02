@@ -1,12 +1,19 @@
 import { readTodos, writeTodos } from './storage.js';
 
-export async function getAllTodos() {
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+  createdAt: string;
+}
+
+export async function getAllTodos(): Promise<Todo[]> {
   return await readTodos();
 }
 
-export async function addTodo(text) {
-  const todos = await readTodos();
-  const newTodo = {
+export async function addTodo(text: string): Promise<Todo> {
+  const todos = await readTodos() as Todo[];
+  const newTodo: Todo = {
     id: Date.now().toString(),
     text,
     completed: false,
@@ -17,8 +24,8 @@ export async function addTodo(text) {
   return newTodo;
 }
 
-export async function toggleTodo(id) {
-  const todos = await readTodos();
+export async function toggleTodo(id: string): Promise<Todo | undefined> {
+  const todos = await readTodos() as Todo[];
   const todo = todos.find(t => t.id === id);
   if (todo) {
     todo.completed = !todo.completed;
@@ -27,8 +34,8 @@ export async function toggleTodo(id) {
   return todo;
 }
 
-export async function deleteTodo(id) {
-  const todos = await readTodos();
+export async function deleteTodo(id: string): Promise<{ success: boolean }> {
+  const todos = await readTodos() as Todo[];
   const filtered = todos.filter(t => t.id !== id);
   await writeTodos(filtered);
   return { success: true };

@@ -4,7 +4,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = join(__dirname, 'data');
+const DATA_DIR = join(__dirname, './data');
 const TODOS_FILE = join(DATA_DIR, 'todos.json');
 
 async function ensureDataDir() {
@@ -24,7 +24,7 @@ export async function readTodos() {
   return JSON.parse(data);
 }
 
-export async function writeTodos(todos) {
+export async function writeTodos(todos: unknown[]) {
   await ensureDataDir();
   await writeFile(TODOS_FILE, JSON.stringify(todos, null, 2), 'utf-8');
 }
