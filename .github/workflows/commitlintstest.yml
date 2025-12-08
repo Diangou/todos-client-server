@@ -26,4 +26,3 @@ jobs:
       - name: Run commitlint on PR commits
         run: |
           npx commitlint --from=origin/${{ github.base_ref }} --to=HEAD
-# petit commentaire ahuzahuahus
