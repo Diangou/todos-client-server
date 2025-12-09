@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765287217897" clover="3.2.0">
-  <project timestamp="1765287217897" name="All files">
+<coverage generated="1765287716102" clover="3.2.0">
+  <project timestamp="1765287716102" name="All files">
     <metrics statements="16" coveredstatements="6" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="2" elements="24" coveredelements="8" complexity="0" loc="16" ncloc="16" packages="1" files="1" classes="1"/>
     <file name="todos.ts" path="C:\Users\diang\OneDrive\Documents\projet-ci-cd-iim\todos-client-server\packages\server\src\todos.ts">
       <metrics statements="16" coveredstatements="6" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="2"/>
