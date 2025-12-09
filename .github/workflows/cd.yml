@@ -1,4 +1,4 @@
-name: Build and Push Docker Image on Tag #test tag 4
+name: Build and Push Docker Image on Tag #test tag 6
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./packages/server/Dockerfile
+          file: Dockerfile
           push: false
           platforms: linux/amd64
           tags: |
