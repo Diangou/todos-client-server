@@ -22,9 +22,9 @@ jobs:
       - name: Build and push production image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile
-          push: true
+          context: ./packages/server
+          file: ./packages/server/Dockerfile
+          push: false
           platforms: linux/amd64
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ github.ref_name }}
