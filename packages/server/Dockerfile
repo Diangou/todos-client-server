@@ -27,7 +27,7 @@ RUN npm ci --only=production
 
 COPY --from=build /app/dist ./dist
 
-EXPOSE 3005
+EXPOSE 3001
 
 RUN ls -R
 

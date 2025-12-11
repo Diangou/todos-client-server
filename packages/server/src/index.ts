@@ -6,7 +6,11 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json())
+
+app.get("/", (req, res) => {
+  res.send("API Todo backend en ligne");
+});
 
 app.get('/api/todos', async (req, res) => {
   const todos = await getAllTodos();
