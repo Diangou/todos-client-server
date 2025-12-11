@@ -147,7 +147,7 @@ jobs:
         #  echo "Coverage OK"
     
   build-docker:
-    name: Build Docker image
+    name: Build Docker image (for PR scan)
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
@@ -179,7 +179,7 @@ jobs:
           path: todo-backend.tar
 
   security-scan-docker:
-    name: Security Scan
+    name: Security Scan (Trivy)
     runs-on: ubuntu-latest
     needs: build-docker
     if: github.event_name == 'pull_request'
