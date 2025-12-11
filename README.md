@@ -22,8 +22,8 @@ Notre projet est composé de trois parties principales : le **frontend -> packag
 
 ## Accès aux environnements déployés
 
-- **Frontend (Vercel) :**
-- **Backend (Render) :**
+- **Frontend (Vercel) :** [https://todos-client-server-6ocw.vercel.app/](https://todos-client-server-6ocw.vercel.app/)
+- **Backend (Render) :**[https://todo-backend-n14j.onrender.com/](https://todo-backend-n14j.onrender.com/)
 
 ---
 
