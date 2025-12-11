@@ -166,6 +166,7 @@ jobs:
           context: ./packages/server
           file: ./packages/server/Dockerfile
           push: false
+          load: true
           tags: todo-backend:pr
 
   security-scan-docker:
