@@ -3,7 +3,7 @@ name: CD
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   build:
@@ -32,36 +32,33 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
 
   deploy-frontend:
-  name: Deploy Frontend to Vercel
-  needs: build
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    name: Deploy Frontend to Vercel
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.x'
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
 
-    - name: Install frontend dependencies
-      run: |
-        cd packages/client
-        npm ci
+      - name: Install frontend dependencies
+        working-directory: packages/client
+        run: npm ci
 
-    - name: Build frontend
-      run: |
-        cd packages/client
-        npm run build
+      - name: Build frontend
+        working-directory: packages/client
+        run: npm run build
 
-    - name: Deploy to Vercel
-      uses: amondnet/vercel-action@v25
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        vercel-args: '--prod'
-      
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
 
   deploy-backend:
     name: Deploy Backend to Render
