@@ -101,49 +101,49 @@ jobs:
           path: packages/server/coverage/*
 
   coverage:
-  name: Coverage Enforcement (Non-blocking)
-  runs-on: ubuntu-latest
-  needs: test
-  if: github.event_name == 'pull_request'
+    name: Coverage Enforcement (Non-blocking)
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage
+          path: packages/server/coverage
 
-    - name: Download coverage artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: coverage
-        path: packages/server/coverage
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
 
-    - name: Install jq
-      run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Verify coverage threshold (non-blocking)
+        continue-on-error: true
+        run: |
+          SUMMARY="packages/server/coverage/coverage-final.json"
 
-    - name: Verify coverage threshold (non-blocking)
-      continue-on-error: true
-      run: |
-        SUMMARY="packages/server/coverage/coverage-final.json"
+          echo "Reading coverage from: $SUMMARY"
 
-        echo "Reading coverage from: $SUMMARY"
+          if [ ! -f "$SUMMARY" ]; then
+            echo "⚠️ Coverage summary not found — skipping check"
+            exit 0
+          fi
 
-        if [ ! -f "$SUMMARY" ]; then
-          echo "⚠️ Coverage summary not found — skipping check"
-          exit 0
-        fi
+          COV=$(jq '.total.lines.pct' "$SUMMARY")
+          COV_INT=${COV%.*}
+          THRESHOLD=70
 
-        # Extraire le pourcentage total des lignes
-        COV=$(jq '.total.lines.pct' "$SUMMARY")
-        COV_INT=${COV%.*}
-        THRESHOLD=70
+          echo "Coverage: $COV_INT% (minimum required: $THRESHOLD%)"
 
-        echo "Coverage: $COV_INT% (minimum required: $THRESHOLD%)"
+          if [ "$COV_INT" -lt "$THRESHOLD" ]; then
+            echo "⚠️ Coverage too low (but not failing the pipeline)"
+            exit 1
+          fi
 
-        if [ "$COV_INT" -lt "$THRESHOLD" ]; then
-          echo "⚠️ Coverage too low (but not failing the pipeline)"
-          exit 1
-        fi
-
-        echo "✅ Coverage OK"
+          echo "✅ Coverage OK"
 
   build-docker:
     name: Build Docker image
