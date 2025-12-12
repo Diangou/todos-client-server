@@ -100,8 +100,8 @@ jobs:
           name: coverage
           path: packages/server/coverage/*
 
-
   coverage:
+    name: Coverage
     runs-on: ubuntu-latest
     needs: test
     if: github.event_name == 'pull_request'
@@ -127,25 +127,34 @@ jobs:
           name: coverage
           path: coverage
 
-
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      #- name: Verify coverage
-        #run: |
-        #  COV=$(jq '.total.lines.pct' coverage/coverage-summary.json)
-        #  COV_INT=${COV%.*}
-        #  THRESHOLD=70
+      - name: Verify coverage threshold
+        continue-on-error: true
+        run: |
+          SUMMARY="coverage/coverage-summary.json"
 
-        #  echo "Coverage: $COV_INT% (min: $THRESHOLD%)"
+          echo "Reading coverage from: $SUMMARY"
 
-        #  if [ "$COV_INT" -lt "$THRESHOLD" ]; then
-        #    echo "Coverage too low"
-        #    exit 1
-        #  fi
+          if [ ! -f "$SUMMARY" ]; then
+            echo "⚠️ Coverage summary not found — skipping check"
+            exit 0
+          fi
 
-        #  echo "Coverage OK"
-    
+          COV=$(jq '.total.lines.pct' "$SUMMARY")
+          COV_INT=${COV%.*}
+          THRESHOLD=70
+
+          echo "Coverage: $COV_INT% (minimum required: $THRESHOLD%)"
+
+          if [ "$COV_INT" -lt "$THRESHOLD" ]; then
+            echo "⚠️ Coverage too low (but not failing the pipeline)"
+            exit 1
+          fi
+
+          echo "✅ Coverage OK"
+
   build-docker:
     name: Build Docker image
     runs-on: ubuntu-latest
