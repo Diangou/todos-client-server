@@ -63,25 +63,23 @@ jobs:
           vercel-project-path: ./packages/client
 
   smoke-test:
-  name: Smoke Test Deployment Front
-  runs-on: ubuntu-latest
-  needs: deploy-frontend
+    name: Smoke Test Deployment Front
+    needs: deploy-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check home page is reachable
+        run: |
+          URL="https://todos-client-server-kappa.vercel.app/"
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
 
-  steps:
-    - name: Check home page is reachable
-      run: |
-        URL="https://todos-client-server-kappa.vercel.app/"
-        STATUS=$(curl -o /dev/null -s -w "%{http_code}" $URL)
+          echo "Status code: $STATUS"
 
-        echo "Status code: $STATUS"
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Smoke test failed: site not reachable"
+            exit 1
+          fi
 
-        if [ "$STATUS" -ne 200 ]; then
-          echo "Smoke test failed: site not reachable"
-          exit 1
-        fi
-
-        echo "Smoke test passed"
-        
+          echo "Smoke test passed"
 
   deploy-backend:
     name: Deploy Backend to Render
