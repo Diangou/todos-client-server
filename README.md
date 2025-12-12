@@ -51,3 +51,11 @@ Si la version actuelle (`v1.0.2`) présente des bugs critiques :
 2. Redéployer l’image Docker correspondante du backend sur Render via le tag `v1.0.1`.  
 3. Revenir à la version précédente du frontend sur Vercel si nécessaire (Vercel garde l’historique des déploiements).  
 4. Vérifier que tous les services fonctionnent correctement.
+
+
+## Notifications Discord
+
+- Mise en place d'un système de notification fonctionnel pour les commits
+
+<img width="757" height="787" alt="image" src="https://github.com/user-attachments/assets/c5cde543-cb44-419e-8ac4-9c9cadeaea28" />
+
