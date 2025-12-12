@@ -101,39 +101,29 @@ jobs:
           path: packages/server/coverage/*
 
   coverage:
-    name: Coverage
+    name: Coverage Enforcement (Non-blocking)
     runs-on: ubuntu-latest
     needs: test
     if: github.event_name == 'pull_request'
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.x'
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Download coverage artifact
         uses: actions/download-artifact@v4
         with:
           name: coverage
-          path: coverage
+          path: packages/server/coverage
 
       - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
 
-      - name: Verify coverage threshold
+      - name: Verify coverage threshold (non-blocking)
         continue-on-error: true
         run: |
-          SUMMARY="coverage/coverage-summary.json"
+          SUMMARY="packages/server/coverage/coverage-final.json"
 
           echo "Reading coverage from: $SUMMARY"
 
