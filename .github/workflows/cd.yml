@@ -90,3 +90,22 @@ jobs:
       - name: Trigger Render Deploy Hook
         run: |
           curl "${{ secrets.RENDER_DEPLOY_HOOK_URL }}&imgURL=${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ github.ref_name }}"
+
+  smoke-test-backend:
+    name: Smoke Test Deployment Backend
+    needs: deploy-backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check backend API is reachable
+        run: |
+          URL="https://todo-backend-r4qh.onrender.com/"
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
+
+          echo "Status code: $STATUS"
+
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Smoke test failed: backend not reachable"
+            exit 1
+          fi
+
+          echo "Smoke test backend passed"        
